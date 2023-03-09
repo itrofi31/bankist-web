@@ -118,3 +118,34 @@ const handleHover = function (e) {
 nav.addEventListener('mouseover', handleHover.bind(0.5));
 
 nav.addEventListener('mouseout', handleHover.bind(1));
+
+// Sticky navigation
+// const section1Coords = section1.getBoundingClientRect();
+// console.log(section1Coords.top);
+
+// window.addEventListener('scroll', function () {
+//   if (window.scrollY > section1Coords.top) nav.classList.add('sticky');
+//   else nav.classList.remove('sticky');
+// });
+
+//Sticky navigation Intersection Observer API
+const header = document.querySelector('.header');
+const navHeight = nav.getBoundingClientRect().height;
+//2. create function for API
+const stickyNav = function (entries) {
+  const [entry] = entries; // happens when header intersecting viewport| we have only 1 entry: 0
+  if (!entry.isIntersecting) {
+    // if intersecting is false
+    nav.classList.add('sticky'); //add class
+  } else {
+    nav.classList.remove('sticky');
+  }
+};
+
+//1. create API with 2 args(function and options)
+const headerObserver = new IntersectionObserver(stickyNav, {
+  root: null, // observes viewport
+  threshold: 0, // when header is outside of viewport
+  rootMargin: `-${navHeight}px`,
+});
+headerObserver.observe(header); //what we observe
